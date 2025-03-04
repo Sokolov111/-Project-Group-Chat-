@@ -12,6 +12,7 @@ Server::Server(QObject *parent) : QObject(parent){
 }
 
 void Server::newConnection(){ // При новом подключении
+    data.clear();
     QTcpSocket *clientSocket = server->nextPendingConnection(); // Сервер слушает когда будет следующее подкл.
     clientsList.append(clientSocket); // Помеятить в массив со всеми клиентами.
 
@@ -30,8 +31,6 @@ void Server::readData(){ // Считать полученные данные.
 
     QString receivedString;
     in >> receivedString;
-
-    server = (QTcpServer*)sender();
 
     sendData(receivedString); // Отправить данные клиентам.
 }
@@ -60,5 +59,6 @@ void Server::onDisconnect(){
 
     qDebug() << "Client Disconnected !";
     clientsList.removeAll(clientSocket);
+    // clientsList.remove(clientSocket);
     clientSocket->deleteLater();
 }
